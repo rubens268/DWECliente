@@ -1,0 +1,1 @@
+alert(prompt("Que quieres que salga en una alerta"));
