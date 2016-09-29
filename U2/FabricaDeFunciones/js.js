@@ -1,3 +1,4 @@
+// Esta funcion nos permite crear funciones que multipliquen un numero por si mismo tantas veces como sea necesario (exponente)
 function creaExponencial(exponente) {
 	return function (x) {
 		var num = x;
