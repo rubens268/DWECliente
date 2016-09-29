@@ -35,7 +35,7 @@ function mostrarSurtido () {
 	document.write("<p style='float: right;margin-top: -2px;cursor: pointer;' onClick='reiniciarPaginaDefault()'>Volver Al Inicio</p> <table><tr><th>Producto</th><th>Imagen</th></tr>");
 	var surtido = generaSurtido();
 	for (var i = surtido.length - 1; i >= 0; i--) {
-		document.write("<tr><td>" + surtido[i] + "</td><td><img src='" + consultaImagen(i) + "' onClick='obtenerPrecio(" + i + ")' width='100px'></img></td></tr>");
+		document.write("<tr><td>" + surtido[i] + "</td><td><img style='cursor: pointer;' src='" + consultaImagen(i) + "' onClick='obtenerPrecio(" + i + ")' width='100px'></img></td></tr>");
 	}
 	document.write("</table>")
 }
@@ -50,7 +50,7 @@ function obtenerPrecio (indice) {
 		if (i == indice)
 			htmlExtra = "<td>" + consultaPrecio(i).toFixed(2) + "</td>"
 
-		document.write("<tr><td>" + surtido[i] + "</td><td><img src='" + consultaImagen(i) + "' onClick='obtenerPrecio(" + i + ")' width='100px'></img>" + htmlExtra + "</td></tr>");
+		document.write("<tr><td>" + surtido[i] + "</td><td><img style='cursor: pointer;' src='" + consultaImagen(i) + "' onClick='obtenerPrecio(" + i + ")' width='100px'></img>" + htmlExtra + "</td></tr>");
 	}
 	document.write("</table>")
 }
