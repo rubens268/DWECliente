@@ -22,4 +22,4 @@ var expUsu = creaExponencial(exponenteUsuario);
 var numeroUsuario = prompt("Introduce un número");
 var numUsu = expUsu(numeroUsuario);
 
-alert(exponenteUsuario + " ^ " + numeroUsuario + " = " + numUsu);
+alert(numeroUsuario + " ^ " + exponenteUsuario + " = " + numUsu);
