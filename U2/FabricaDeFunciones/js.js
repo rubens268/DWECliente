@@ -17,4 +17,9 @@ console.log(cubo(5));
 var cuadrado = creaExponencial(2);
 console.log(cuadrado(5));
 
+var exponenteUsuario = prompt("Introduce un exponente:");
+var expUsu = creaExponencial(exponenteUsuario);
+var numeroUsuario = prompt("Introduce un número");
+var numUsu = expUsu(numeroUsuario);
 
+alert(exponenteUsuario + " ^ " + numeroUsuario + " = " + numUsu);
