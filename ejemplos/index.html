@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ejemplo Window</title>
+	<script type="text/javascript" src="script.js"></script>
+</head>
+<body onload="webCargada()">
+	<p id="hora"></p>
+	<button id="refreshButton" onclick="toggleRefreshButton()">Iniciar Refresco</button>
+	<br/>
+	<div>
+		<label for="stopTime">Parar refresco </label> <input type="text" id="stopTime"> <label for="stopTime"> segundos.</label>
+		<button onclick="timeout()">Enviar</button>
+	</div>
+</body>
+</html>
