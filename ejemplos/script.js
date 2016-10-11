@@ -29,8 +29,15 @@ function comprobarFecha() {
 
 function timeout() {
 	var tiempoCampo = parseInt(document.getElementById('stopTime').value);
-	clearInterval(interval);
-	setTimeout(function() {
-		interval = setInterval(comprobarFecha, 100)
-	}, tiempoCampo * 1000);
+	if (!isNaN(tiempoCampo) || isFinite(tiempoCampo))
+	{
+		clearInterval(interval);
+		setTimeout(function() {
+			interval = setInterval(comprobarFecha, 100)
+		}, tiempoCampo * 1000);
+	}
+	else 
+	{
+		alert("Has de introducir un número");
+	}
 }
