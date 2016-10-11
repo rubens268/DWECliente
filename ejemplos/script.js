@@ -29,7 +29,7 @@ function comprobarFecha() {
 
 function timeout() {
 	var tiempoCampo = parseInt(document.getElementById('stopTime').value);
-	if (!isNaN(tiempoCampo) || isFinite(tiempoCampo))
+	if (!isNaN(tiempoCampo) && isFinite(tiempoCampo))
 	{
 		clearInterval(interval);
 		setTimeout(function() {
