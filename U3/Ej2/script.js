@@ -19,7 +19,7 @@ function readData () {
 	wind = window.open("","Manipular arrays", "width=600,height=250");
 	wind.document.write('<meta charset="utf-8">');
 	var winned = true;
-	var puntos = 0;
+	var puntos = sessionStorage.getItem("puntos");
 	var fails = "";
 	for (var data in datos) {
 		if (datos[data].charAt(0) != letra) {
@@ -29,12 +29,15 @@ function readData () {
 		else
 			puntos++;
 	}
-
+	
 	if (winned)
+	{
+		sessionStorage.setItem("puntos", puntos);
 		if (puntos == 1)
 			wind.document.write("<b>Enhorabuena! Lo has conseguido! Tienes "+ puntos + " punto.</b>");
 		else
 			wind.document.write("<b>Enhorabuena! Lo has conseguido! Tienes "+ puntos + " puntos.</b>");
+	}
 	else{
 		wind.document.write("<b>Has perdido! Tienes unos cuantos errores:</b>");
 		wind.document.write("<p>" + fails + "</p>");
