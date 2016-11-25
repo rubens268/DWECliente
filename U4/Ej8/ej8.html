@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>UD4 Ej8</title>
+        <meta charset="UTF-8">
+        <script>
+            /*
+            En la primera temporada de Stranger Things el niño está dentro de la pared.
+            ╔══════════╗
+            ║   _\|/^  ║ 
+            ║   (_oo   ║
+            ║    |     ║
+            ║   /|\    ║
+            ║    |     ║
+            ║    LL    ║
+            ╚══════════╝
+            */
+
+            function modificarSize() {
+                var h1s = document.querySelectorAll('h1');
+                var ps = document.querySelectorAll('p');
+                var size = document.querySelector("#combo").value;
+
+                for (var item of h1s)
+                    item.style.fontSize = size;
+                for (var item of ps)
+                    item.style.fontSize = size;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Modificar tamaño</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <p>Qué bonito que es Lorem ipsum. Voy a llorar de la emoción!</p>
+        <div>
+            <span>Seleccionar tamaño:</span>
+            <select id="combo">
+                <option value="10px">Pequeño</option>
+                <option value="16px">Mediano</option>
+                <option value="24px">Grande</option>
+            </select>
+            <button onclick="modificarSize();">Cambiar</button>
+        </div>
+  </body>
+
+</html>

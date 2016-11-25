@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Crea elementos del DOM</title>
+        <script type="text/javascript">
+        function creaDOM(){
+            var titular = document.createElement('h1');
+            titular = document.getElementsByTagName("body")[0].appendChild(titular);
+            titular.innerText = "Esto es un titular";
+
+            var imagen = document.createElement('img');
+            imagen = document.getElementsByTagName("body")[0].appendChild(imagen);
+            imagen.src = "http://frontendlabs.io/wp-content/uploads/2014/06/selenium_pruebas_funcionales.jpg";
+            imagen.style.width = "200px";
+
+            imagen.parentNode.removeChild(imagen);
+        }
+        </script>
+    </head>
+    <body onload="creaDOM()">
+    </body>
+</html>

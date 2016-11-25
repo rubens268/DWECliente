@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>U5 Ej1</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <img src="img1.jpg" width="300"></img>
+        <script>
+            document.querySelector('img').onmouseover = function () {
+                document.querySelector('img').src = "img2.gif";
+            }
+            document.querySelector('img').onmouseout = function () {
+                document.querySelector('img').src = "img1.jpg";
+            }
+        </script>
+    </body>
+</html>
