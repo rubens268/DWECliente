@@ -9,6 +9,7 @@ document.querySelector('h1').onmousewheel = function (e) {
     else {
         e.target.style.fontSize = parseInt(e.target.style.fontSize.slice(0, -2)) / 2 + "px";
     }
+    e.target.innerHTML = "Esto es un titulo a " + e.target.style.fontSize;
 }
 
 document.querySelector('img').onmousewheel = function (e) {
