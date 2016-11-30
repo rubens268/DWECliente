@@ -33,7 +33,7 @@ onkeyup = function (e) {
     // Derecha
     else if (e.keyCode == 39)
     {
-        if (cuadrado.offsetLeft < document.body.offsetWidth - 200)
+        if (cuadrado.offsetLeft < document.body.offsetWidth - 220)
         {
             var currentPosition = parseInt(cuadrado.style.left.substring(0, cuadrado.style.left.length - 2));
             cuadrado.style.left = currentPosition + 20 + "px";
