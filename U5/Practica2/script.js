@@ -83,17 +83,45 @@ function comprobarTresEnRaya () {
             botonesY.push(boton.id);
     }
 
+    
     if (botonesX.length == 3)
     {
         botonesX.sort();
-        if ((parseInt(botonesX[0][1])+1 == parseInt(botonesX[1][1]) && parseInt(botonesX[1][1]) == parseInt(botonesX[2][1])-1) ||
+        // horizontal
+        if (botonesX[0][0] == botonesX[1][0] && botonesX[1][0] == botonesX[2][0])
+            if (parseInt(botonesX[0][1])+1 == parseInt(botonesX[1][1]) && parseInt(botonesX[1][1]) == parseInt(botonesX[2][1])-1) 
+                return "X";
+        
+        // vertical
+        if (botonesX[0][1] == botonesX[1][1] && botonesX[1][1] == botonesX[2][1])
+            if (parseInt(botonesX[0][0])+1 == parseInt(botonesX[1][0]) && parseInt(botonesX[1][0]) == parseInt(botonesX[2][0])-1)
+                return "X";
+
+        // diagonal
+        if (((parseInt(botonesX[0][1])+1 == parseInt(botonesX[1][1]) && parseInt(botonesX[1][1]) == parseInt(botonesX[2][1])-1) || 
+            (parseInt(botonesX[0][1])-1 == parseInt(botonesX[1][1]) && parseInt(botonesX[1][1]) == parseInt(botonesX[2][1])+1))
+            &&
             (parseInt(botonesX[0][0])+1 == parseInt(botonesX[1][0]) && parseInt(botonesX[1][0]) == parseInt(botonesX[2][0])-1))
             return "X";
     }
-    else if (botonesY.length == 3)
+    
+    if (botonesY.length == 3)
     {
         botonesY.sort();
-        if ((parseInt(botonesY[0][1])+1 == parseInt(botonesY[1][1]) && parseInt(botonesY[1][1]) == parseInt(botonesY[2][1])-1) ||
+        // horizontal
+        if (botonesY[0][0] == botonesY[1][0] && botonesY[1][0] == botonesY[2][0])
+            if (parseInt(botonesY[0][1])+1 == parseInt(botonesY[1][1]) && parseInt(botonesY[1][1]) == parseInt(botonesY[2][1])-1) 
+                return "O";
+        
+        // vertical
+        if (botonesY[0][1] == botonesY[1][1] && botonesY[1][1] == botonesY[2][1])
+            if (parseInt(botonesY[0][0])+1 == parseInt(botonesY[1][0]) && parseInt(botonesY[1][0]) == parseInt(botonesY[2][0])-1)
+                return "O";
+        
+        // diagonal
+        if (((parseInt(botonesY[0][1])+1 == parseInt(botonesY[1][1]) && parseInt(botonesY[1][1]) == parseInt(botonesY[2][1])-1) || 
+            (parseInt(botonesY[0][1])-1 == parseInt(botonesY[1][1]) && parseInt(botonesY[1][1]) == parseInt(botonesY[2][1])+1))
+            &&
             (parseInt(botonesY[0][0])+1 == parseInt(botonesY[1][0]) && parseInt(botonesY[1][0]) == parseInt(botonesY[2][0])-1))
             return "O";
     }
