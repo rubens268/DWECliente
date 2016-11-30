@@ -36,6 +36,7 @@ function dom () {
                         alert("Hay demasiadas fichas O");
                     }
                 } 
+            document.getElementById('turno').innerHTML = turno;
         }
 
         boton.ondblclick = function () {
@@ -51,4 +52,22 @@ function dom () {
             this.innerHTML = "";
         }
     }
+
+    
+}
+
+function comprobarTresEnRaya () {
+    var botones = document.getElementsByTagName('button');
+    var botonesX = new Array();
+    var botonesY = new Array();
+    for (var boton of botones)
+    {
+        if (boton.innerHTML == "X")
+            botonesX.push(boton);
+        if (boton.innerHTML == "Y")
+            botonesY.push(boton);
+    }
+
+    
+    
 }
