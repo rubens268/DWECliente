@@ -3,6 +3,12 @@
  * Comprobar cuando estas cerrado
  * Comprobar victoria
  * Hacer BOT
+ *  Para borrar la carta que pone el BOT
+ * for (var x = 0; x < fichasEnMano.length; x++)
+{
+    if ((fichasEnMano[x].num1 == fichasOriginal[n].num1)&&(fichasEnMano[x].num2 == fichasOriginal[n].num2))
+        fichasEnMano.splice(x, 1);
+}
  */
 
 function ficha (num1, num2, bg) {
@@ -76,6 +82,8 @@ var fichasOriginal = [
     new ficha(6, 6, "url('img/fichasDomino.png') no-repeat -284px -307px")
 ];
 
+var fichasEnMano = new Array();
+
 // DATOS MESA
 var num1Mesa;
 var num2Mesa;
@@ -131,6 +139,7 @@ function obtenerNuevaFicha () {
         }
         var ficha = fichas[nFicha];
         fichas.splice(nFicha, 1);
+        ficha.fmID = fichasEnMano.push(ficha); 
         return ficha;
     }
 }
@@ -167,6 +176,11 @@ function drop(ev) {
         copiaFicha.ondragstart = "";
         var n = copiaFicha.getAttribute('data-n');
 
+        for (var x = 0; x < fichasEnMano.length; x++)
+        {
+            if ((fichasEnMano[x].num1 == fichasOriginal[n].num1)&&(fichasEnMano[x].num2 == fichasOriginal[n].num2))
+                fichasEnMano.splice(x, 1);
+        }
         
         num1Mesa = fichasOriginal[n].num1; 
         num2Mesa = fichasOriginal[n].num2;
@@ -219,13 +233,17 @@ function drop(ev) {
         }
         else
             return;
-        
+        console.log("Victoria: " + comprobarVictoria());
     }
     console.log ("Fichas Actuales: " + num1Mesa + ":" + num2Mesa);
     ev.preventDefault();
 }
 
 function comprobarVictoria () {
-    if (num1Mesa == num2Mesa)
-        
+    if (fichas.length == 0)
+        if (num1Mesa == num2Mesa)
+            for (var ficha of  fichasEnMano)
+                if ((ficha.num1 == num1Mesa)&&(ficha.num2 == num2Mesa))
+                    return false;
+    return false;
 }
