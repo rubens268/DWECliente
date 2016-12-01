@@ -1,14 +1,16 @@
 #mano {
-    height: 68px;
-    position: absolute;
+    height: 10%;
+    position: relative;
     bottom: 0px;
 }
 
 #tablero {
+    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     height: 90%;
+    text-align: center;
 }
 
 body > div, body {
@@ -17,14 +19,4 @@ body > div, body {
     height: 100%;
     margin: 0px;
     padding: 0px;
-}
-
-#startPos {
-    font-size: 12px;
-    width: 88px;
-    height: 46px;
-    text-overflow: ellipsis;
-    display: block;
-    overflow: hidden;
-    margin: auto;
 }

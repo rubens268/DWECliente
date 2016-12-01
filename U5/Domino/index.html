@@ -10,9 +10,11 @@
     <body onload="waitDOM()">
         <div>
             <div id="tablero"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="startPos">Arrastra aquí la primera ficha</div>
+                Arrastra aquí la primera ficha
             </div>
-            <div id="mano"></div>
+            <div id="mano">
+                <button onclick="pedirFicha()">Dame otra ficha</button>
+            </div>
         </div>
     </body>
 </html>
