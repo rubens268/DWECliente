@@ -1,0 +1,30 @@
+#mano {
+    height: 68px;
+    position: absolute;
+    bottom: 0px;
+}
+
+#tablero {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+}
+
+body > div, body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#startPos {
+    font-size: 12px;
+    width: 88px;
+    height: 46px;
+    text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
+    margin: auto;
+}

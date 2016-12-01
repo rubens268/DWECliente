@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style.css" rel="stylesheet">
+        <script src="script.js"></script>
+    </head>
+    <body onload="waitDOM()">
+        <div>
+            <div id="tablero"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="startPos">Arrastra aquí la primera ficha</div>
+            </div>
+            <div id="mano"></div>
+        </div>
+    </body>
+</html>
