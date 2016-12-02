@@ -1,6 +1,7 @@
 /** Cosas para hacer:
  * 
- * Comprobar cuando estas cerrado
+ * Comprobar que empieza el que tenga doble 6
+ * Reposicionar fichas en tablero
  * Comprobar victoria
  * Hacer BOT
  *  Para borrar la carta que pone el BOT
@@ -165,6 +166,13 @@ function drag(ev) {
 function drop(ev) {
     var data = ev.dataTransfer.getData("text");
     
+    var n = document.getElementById(data).getAttribute('data-n');
+    for (var x = 0; x < fichasEnMano.length; x++)
+    {
+        if ((fichasEnMano[x].num1 == fichasOriginal[n].num1)&&(fichasEnMano[x].num2 == fichasOriginal[n].num2))
+            fichasEnMano.splice(x, 1);
+    }
+
     if (document.getElementById('tablero').getElementsByClassName('ficha').length < 1)
     {
         console.log("Primera ficha");
@@ -175,12 +183,6 @@ function drop(ev) {
         copiaFicha.draggable = false;
         copiaFicha.ondragstart = "";
         var n = copiaFicha.getAttribute('data-n');
-
-        for (var x = 0; x < fichasEnMano.length; x++)
-        {
-            if ((fichasEnMano[x].num1 == fichasOriginal[n].num1)&&(fichasEnMano[x].num2 == fichasOriginal[n].num2))
-                fichasEnMano.splice(x, 1);
-        }
         
         num1Mesa = fichasOriginal[n].num1; 
         num2Mesa = fichasOriginal[n].num2;
@@ -231,19 +233,34 @@ function drop(ev) {
             num2Mesa = fichasOriginal[id].num1;
             console.log("Mismo numero 2");
         }
-        else
-            return;
-        console.log("Victoria: " + comprobarVictoria());
+        if(comprobarVictoria())
+            alert("Has ganado");
     }
     console.log ("Fichas Actuales: " + num1Mesa + ":" + num2Mesa);
     ev.preventDefault();
 }
 
 function comprobarVictoria () {
+    if (fichasEnMano.length == 0)
+            return true;
     if (fichas.length == 0)
-        if (num1Mesa == num2Mesa)
-            for (var ficha of  fichasEnMano)
-                if ((ficha.num1 == num1Mesa)&&(ficha.num2 == num2Mesa))
-                    return false;
-    return false;
+    {
+        var posibilidad = false;
+        for (var ficha of  fichasEnMano)
+            if ((ficha.num1 == num1Mesa)||(ficha.num2 == num2Mesa)||(ficha.num2 == num1Mesa)||(ficha.num1 == num2Mesa))
+                if (ficha.num1 != ficha.num2) 
+                    posibilidad = true;
+        
+        if (fichas.length > 0)
+            for (var ficha of  fichas)
+                if ((ficha.num1 == num1Mesa)||(ficha.num2 == num2Mesa)||(ficha.num2 == num1Mesa)||(ficha.num1 == num2Mesa))
+                    if (ficha.num1 != ficha.num2) 
+                        posibilidad = true;
+
+        return !posibilidad;
+        
+    }
+    else
+        return false;
+    
 }
