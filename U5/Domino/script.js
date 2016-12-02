@@ -1,6 +1,5 @@
 /** Cosas para hacer:
  * 
- * Comprobar que empieza el que tenga doble 6
  * Reposicionar fichas en tablero
  */
 
@@ -87,6 +86,19 @@ function bot () {
         }
     }
 }
+
+function contador () {
+    this.numeroFichas = 0;
+    this.sumar = function () {
+        this.numeroFichas++;
+        if (this.numeroFichas == 5)
+        {
+            this.numeroFichas = 0;
+            return true;
+        }
+        return false;
+    }
+};
 // ######################### FIN CONSTRUCTORES #####################################
 
 // ######################### INICIALIZACIÓN DE VARIABLES #####################################
@@ -154,6 +166,7 @@ var fichasOriginal = [
 
 var fichasEnMano = new Array();
 
+var contadorFichas = new contador(); 
 // DATOS MESA
 var num1Mesa;
 var num2Mesa;
@@ -178,7 +191,6 @@ function waitDOM (){
         fichaHTML.ondragstart =  drag;
         document.getElementById('mano').appendChild(fichaHTML);
     }
-    
 }
 // ######################### FIN DOM #####################################
 
