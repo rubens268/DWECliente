@@ -2,16 +2,9 @@
  * 
  * Comprobar que empieza el que tenga doble 6
  * Reposicionar fichas en tablero
- * Comprobar victoria
- * Hacer BOT
- *  Para borrar la carta que pone el BOT
- * for (var x = 0; x < fichasEnMano.length; x++)
-{
-    if ((fichasEnMano[x].num1 == fichasOriginal[n].num1)&&(fichasEnMano[x].num2 == fichasOriginal[n].num2))
-        fichasEnMano.splice(x, 1);
-}
  */
 
+// ######################### CONSTRUCTORES #####################################
 function ficha (num1, num2, bg) {
     this.num1 = num1;
     this.num2 = num2;
@@ -21,6 +14,82 @@ function ficha (num1, num2, bg) {
     this.bg = bg;
 } 
 
+function bot () {
+    this.mano = generateHand();
+    this.turno = function () {
+        if (winned)
+            return;
+        for (var i = 0; i< this.mano.length; i++)
+        {
+            if ((this.mano[i].num1 == num1Mesa)||(this.mano[i].num2 == num2Mesa)||(this.mano[i].num2 == num1Mesa)||(this.mano[i].num1 == num2Mesa))
+            {
+                for (var x = 0; x < fichasEnMano.length; x++)
+                {
+                    if ((fichasEnMano[x].num1 == this.mano[i].num1)&&(fichasEnMano[x].num2 == this.mano[i].num2))
+                        fichasEnMano.splice(x, 1);
+                }
+                var fichaHTML = document.createElement('div');
+                fichaHTML.style.height = this.mano[i].height + "px";
+                fichaHTML.style.width = this.mano[i].width + "px";
+                fichaHTML.style.background = this.mano[i].bg;
+                fichaHTML.style.display = "inline-block";
+                fichaHTML.id = this.mano[i].num1 + "" + this.mano[i].num2;
+                fichaHTML.setAttribute('class', 'ficha');
+                
+                if (num1Mesa == this.mano[i].num1)
+                {
+                    document.getElementById('tablero').insertBefore(fichaHTML, document.getElementById('tablero').firstChild);
+                    fichaHTML.style.transform = "rotate(180deg)";
+                    num1Mesa = this.mano[i].num2;
+                    console.log("Mismo numero 1");
+                }
+                else if (num1Mesa == this.mano[i].num2)
+                {
+                    fichaHTML.style.transform = "";
+                    document.getElementById('tablero').insertBefore(fichaHTML, document.getElementById('tablero').firstChild);
+                    num1Mesa = this.mano[i].num1;
+                    console.log("Mismo numero 1 - 2");
+                }
+                    
+                else if (num2Mesa == this.mano[i].num1)
+                {
+                    fichaHTML.style.transform = "";
+                    document.getElementById('tablero').appendChild(fichaHTML);
+                    num2Mesa = this.mano[i].num2;
+                    console.log("Mismo numero 2 - 1");
+                }
+                else if (num2Mesa == this.mano[i].num2)
+                {
+                    document.getElementById('tablero').appendChild(fichaHTML);
+                    fichaHTML.style.transform = "rotate(180deg)";
+                    num2Mesa = this.mano[i].num1;
+                    console.log("Mismo numero 2");
+                }
+                
+                this.mano.splice(i, 1);
+                if(comprobarVictoria() !== false) {
+                    if(comprobarVictoria() === true)
+                        alert('Empate');
+                    else
+                        alert("Ha ganado el " + comprobarVictoria());
+                    winned = true;
+                }
+                console.log(this.mano);
+                return;
+            }
+        }
+
+        if (fichas.length > 0)
+        {
+            this.mano.push(obtenerNuevaFicha());
+            console.log(this.mano);
+            return;
+        }
+    }
+}
+// ######################### FIN CONSTRUCTORES #####################################
+
+// ######################### INICIALIZACIÓN DE VARIABLES #####################################
 var fichas = [
     new ficha(0, 0, "url('img/fichasDomino.png') no-repeat -6px -7px"),
     new ficha(0, 1, "url('img/fichasDomino.png') no-repeat -6px -57px"),
@@ -88,8 +157,13 @@ var fichasEnMano = new Array();
 // DATOS MESA
 var num1Mesa;
 var num2Mesa;
+var newBot = new bot();
+var winned = false;
+// ######################### FIN DE INICIALIZACIÓN DE VARIABLES #####################################
 
+// ######################### DOM #####################################
 function waitDOM (){
+    
     for (var ficha of generateHand()) {
         var fichaHTML = document.createElement('div');
         fichaHTML.style.height = ficha.height + "px";
@@ -106,8 +180,12 @@ function waitDOM (){
     }
     
 }
+// ######################### FIN DOM #####################################
 
+// ######################### FUNCIONES #####################################
 function pedirFicha () {
+    if (winned)
+        return;
     var ficha = obtenerNuevaFicha();
     var fichaHTML = document.createElement('div');
     if (ficha != undefined)
@@ -124,7 +202,7 @@ function pedirFicha () {
         fichaHTML.ondragstart =  drag;
         document.getElementById('mano').appendChild(fichaHTML);
     }
-    
+    newBot.turno();
 }
 
 function obtenerNuevaFicha () {
@@ -164,6 +242,8 @@ function drag(ev) {
 }
 
 function drop(ev) {
+    if (winned)
+        return;
     var data = ev.dataTransfer.getData("text");
     
     var n = document.getElementById(data).getAttribute('data-n');
@@ -187,6 +267,7 @@ function drop(ev) {
         num1Mesa = fichasOriginal[n].num1; 
         num2Mesa = fichasOriginal[n].num2;
         document.getElementById('tablero').appendChild(copiaFicha);
+        newBot.turno();
     }
     else if (document.getElementById('tablero').getElementsByClassName('ficha').length >= 1) {
         /* Se genera la copia */
@@ -203,6 +284,7 @@ function drop(ev) {
             copiaFicha.style.transform = "rotate(180deg)";
             num1Mesa = fichasOriginal[id].num2;
             console.log("Mismo numero 1");
+            newBot.turno();
         }
         else if (num1Mesa == fichasOriginal[id].num2)
         {
@@ -212,6 +294,7 @@ function drop(ev) {
             document.getElementById('tablero').insertBefore(copiaFicha, document.getElementById('tablero').firstChild);
             num1Mesa = fichasOriginal[id].num1;
             console.log("Mismo numero 1 - 2");
+            newBot.turno();
         }
             
         else if (num2Mesa == fichasOriginal[id].num1)
@@ -222,6 +305,7 @@ function drop(ev) {
             document.getElementById('tablero').appendChild(copiaFicha);
             num2Mesa = fichasOriginal[id].num2;
             console.log("Mismo numero 2 - 1");
+            newBot.turno();
         }
         else if (num2Mesa == fichasOriginal[id].num2)
         {
@@ -232,17 +316,34 @@ function drop(ev) {
             copiaFicha.style.transform = "rotate(180deg)";
             num2Mesa = fichasOriginal[id].num1;
             console.log("Mismo numero 2");
+            newBot.turno();
         }
-        if(comprobarVictoria())
-            alert("Has ganado");
+        if(comprobarVictoria() !== false) {
+            if(comprobarVictoria() === true)
+                alert('Empate');
+            else
+                alert("Ha ganado el " + comprobarVictoria());
+            winned = true;
+        }
+
+        
     }
     console.log ("Fichas Actuales: " + num1Mesa + ":" + num2Mesa);
+    
     ev.preventDefault();
 }
 
 function comprobarVictoria () {
-    if (fichasEnMano.length == 0)
-            return true;
+    console.log("comprobando...")
+    var fichasJ = 0;
+    for (var i = 0; i < document.getElementById('mano').childNodes.length; i++)
+        if (document.getElementById('mano').childNodes[i].tagName != undefined)
+            if (document.getElementById('mano').childNodes[i].getAttribute('class') == "ficha")
+                fichasJ++;
+    if (fichasJ == 0)
+        return "jugador";
+    if (newBot.mano.length == 0)
+        return "bot";
     if (fichas.length == 0)
     {
         var posibilidad = false;
@@ -256,11 +357,28 @@ function comprobarVictoria () {
                 if ((ficha.num1 == num1Mesa)||(ficha.num2 == num2Mesa)||(ficha.num2 == num1Mesa)||(ficha.num1 == num2Mesa))
                     if (ficha.num1 != ficha.num2) 
                         posibilidad = true;
-
-        return !posibilidad;
+        if (!posibilidad)
+        {
+            var puntosJugador = 0;
+            var puntosBot = 0;
+            var fichasJugador = document.getElementById('mano').childNodes;
+            fichasJugador.splice(0,1);
+            for (var fichaJ of fichasJugador)
+                if (fichaJ.getAttribute('class') == "ficha")
+                    puntosJugador += fichaJ.valor;
+            for (var fichaB of newBot.mano)
+                puntosJugador += fichaB.valor;
+            if (puntosBot > puntosJugador)
+                return "bot";
+            else if (puntosJugador > puntosBot)
+                return "jugador";
+            else
+                return true;
+        }
         
     }
     else
         return false;
     
 }
+// ######################### FIN DE FUNCIONES #####################################
