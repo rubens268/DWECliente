@@ -1,6 +1,6 @@
 /** Cosas para hacer:
  * 
- * Reposicionar fichas en tablero
+ * Arreglar compmrobación de victoria
  */
 
 // ######################### CONSTRUCTORES #####################################
@@ -33,47 +33,61 @@ function bot () {
                 fichaHTML.style.background = this.mano[i].bg;
                 fichaHTML.style.display = "inline-block";
                 fichaHTML.id = this.mano[i].num1 + "" + this.mano[i].num2;
-                fichaHTML.setAttribute('class', 'ficha');
+                fichaHTML.setAttribute('class', 'ficha bot');
+                fichaHTML.setAttribute('data-n', this.mano[i].num);
                 
                 if (num1Mesa == this.mano[i].num1)
                 {
+                    //num1Mesa = this.mano[i].num2;
                     document.getElementById('tablero').insertBefore(fichaHTML, document.getElementById('tablero').firstChild);
-                    fichaHTML.style.transform = "rotate(180deg)";
-                    num1Mesa = this.mano[i].num2;
-                    console.log("Mismo numero 1");
+                    if ((contadorFichas.numeroFichas0 == 20)||(contadorFichas.numeroFichas0 == 10)){
+                        fichaHTML.style.display = "block";
+                        insertarFicha(fichaHTML, "izquierda", "rotate(270deg)", true);
+                    }
+                    else
+                    {
+                        insertarFicha(fichaHTML, "izquierda", "rotate(180deg)", true);
+                    }
                 }
                 else if (num1Mesa == this.mano[i].num2)
                 {
-                    fichaHTML.style.transform = "";
-                    document.getElementById('tablero').insertBefore(fichaHTML, document.getElementById('tablero').firstChild);
-                    num1Mesa = this.mano[i].num1;
-                    console.log("Mismo numero 1 - 2");
+                    //num1Mesa = this.mano[i].num1;
+                    if ((contadorFichas.numeroFichas0 == 20)||(contadorFichas.numeroFichas0 == 10)){
+                        fichaHTML.style.display = "block";
+                        insertarFicha(fichaHTML, "izquierda", "rotate(90deg)", true);
+                    }
+                    else
+                    {
+                        insertarFicha(fichaHTML, "izquierda", "", true);
+                    }
                 }
                     
                 else if (num2Mesa == this.mano[i].num1)
                 {
-                    fichaHTML.style.transform = "";
-                    document.getElementById('tablero').appendChild(fichaHTML);
-                    num2Mesa = this.mano[i].num2;
-                    console.log("Mismo numero 2 - 1");
+                    //num2Mesa = this.mano[i].num2;
+                    if ((contadorFichas.numeroFichas1 == 30)||(contadorFichas.numeroFichas1 == 40)){
+                        fichaHTML.style.display = "block";
+                        insertarFicha(fichaHTML, "derecha", "rotate(270deg)", true);
+                    }
+                    else
+                    {
+                        insertarFicha(fichaHTML, "derecha", "", true);
+                    }
                 }
                 else if (num2Mesa == this.mano[i].num2)
                 {
-                    document.getElementById('tablero').appendChild(fichaHTML);
-                    fichaHTML.style.transform = "rotate(180deg)";
-                    num2Mesa = this.mano[i].num1;
-                    console.log("Mismo numero 2");
+                    //num2Mesa = this.mano[i].num1;
+                    if ((contadorFichas.numeroFichas1 == 30)||(contadorFichas.numeroFichas1 == 40)){
+                        fichaHTML.style.display = "block";
+                        insertarFicha(fichaHTML, "derecha", "rotate(90deg)", true);
+                    }
+                    else
+                    {
+                        insertarFicha(fichaHTML, "derecha", "rotate(180deg)", true);
+                    }
                 }
                 
                 this.mano.splice(i, 1);
-                if(comprobarVictoria() !== false) {
-                    if(comprobarVictoria() === true)
-                        alert('Empate');
-                    else
-                        alert("Ha ganado el " + comprobarVictoria());
-                    winned = true;
-                }
-                console.log(this.mano);
                 return;
             }
         }
@@ -81,22 +95,24 @@ function bot () {
         if (fichas.length > 0)
         {
             this.mano.push(obtenerNuevaFicha());
-            console.log(this.mano);
             return;
         }
     }
 }
 
 function contador () {
-    this.numeroFichas = 0;
-    this.sumar = function () {
-        this.numeroFichas++;
-        if (this.numeroFichas == 5)
-        {
-            this.numeroFichas = 0;
-            return true;
-        }
-        return false;
+    this.numeroFichas0 = 24;
+    this.numeroFichas1 = 26;
+    this.fichas = [ 0, 0, 0, 0, 0, 0, 0];
+
+    this.sumar = function (i) {
+        if (i == 1)
+            this.numeroFichas1++;
+        else if (i == 0)
+            this.numeroFichas0--;
+    }
+    this.sumarFicha = function (i) {
+        this.fichas[i]++;
     }
 };
 // ######################### FIN CONSTRUCTORES #####################################
@@ -170,6 +186,7 @@ var contadorFichas = new contador();
 // DATOS MESA
 var num1Mesa;
 var num2Mesa;
+var centro;
 var newBot = new bot();
 var winned = false;
 // ######################### FIN DE INICIALIZACIÓN DE VARIABLES #####################################
@@ -218,7 +235,6 @@ function pedirFicha () {
 }
 
 function obtenerNuevaFicha () {
-    console.log(fichas.length);
     if (fichas.length > 0)
     {
         var nFicha = Math.floor(Math.random()*fichas.length);
@@ -251,6 +267,31 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
+    var item = document.getElementById(ev.target.id);
+    var id = item.getAttribute('data-n');
+    var drops = document.getElementById('tablero').querySelectorAll('[ondrop]');
+    for (var drop of drops)
+    {
+        drop.setAttribute("ondrop", "");
+        drop.setAttribute("ondragover", "");
+    }
+        
+        
+
+
+    if ((num1Mesa == fichasOriginal[id].num1)||(num1Mesa == fichasOriginal[id].num2))
+    {
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].setAttribute("ondrop", "drop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].setAttribute("ondragover", "allowDrop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].style.backgroundColor = "lightgrey";
+    }
+    if ((num2Mesa == fichasOriginal[id].num1)||(num2Mesa == fichasOriginal[id].num2))    
+    {
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].setAttribute("ondrop", "drop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].setAttribute("ondragover", "allowDrop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].style.backgroundColor = "lightgrey";
+    }
+    
 }
 
 function drop(ev) {
@@ -264,89 +305,129 @@ function drop(ev) {
         if ((fichasEnMano[x].num1 == fichasOriginal[n].num1)&&(fichasEnMano[x].num2 == fichasOriginal[n].num2))
             fichasEnMano.splice(x, 1);
     }
+    /* Se genera la copia */
+    var copiaFicha = document.getElementById(data);
+    var id = copiaFicha.getAttribute('data-n');
 
     if (document.getElementById('tablero').getElementsByClassName('ficha').length < 1)
     {
-        console.log("Primera ficha");
         document.getElementById('tablero').innerHTML = "";
-        /** Se genera la copia */
-        var copiaFicha = document.getElementById(data);
-        copiaFicha.style.transform = "";
-        copiaFicha.draggable = false;
-        copiaFicha.ondragstart = "";
-        var n = copiaFicha.getAttribute('data-n');
-        
-        num1Mesa = fichasOriginal[n].num1; 
-        num2Mesa = fichasOriginal[n].num2;
-        document.getElementById('tablero').appendChild(copiaFicha);
-        newBot.turno();
+        document.getElementById('tablero').ondrop = "";
+        document.getElementById('tablero').ondragover = "";
+
+
+        // Generar tablero
+        generarTablero();
+        num1Mesa = fichasOriginal[id].num1; 
+        num2Mesa = fichasOriginal[id].num2;
+        insertarFicha(copiaFicha, "primera", '');
     }
     else if (document.getElementById('tablero').getElementsByClassName('ficha').length >= 1) {
-        /* Se genera la copia */
-        var copiaFicha = document.getElementById(data);
-        var id = copiaFicha.getAttribute('data-n');
-
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].style.backgroundColor = "white";
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].style.backgroundColor = "white";
         // Comparar numeros mesa con ficha y actualizar el otro y poner en un lado o otro en función de eso.
+        var rotation = "";
         if (num1Mesa == fichasOriginal[id].num1)
         {
-            copiaFicha.style.transform = "";
-            copiaFicha.draggable = false;
-            copiaFicha.ondragstart = "";
-            document.getElementById('tablero').insertBefore(copiaFicha, document.getElementById('tablero').firstChild);
-            copiaFicha.style.transform = "rotate(180deg)";
-            num1Mesa = fichasOriginal[id].num2;
-            console.log("Mismo numero 1");
-            newBot.turno();
+            if ((contadorFichas.numeroFichas0 == 20)||(contadorFichas.numeroFichas0 == 10))
+                rotation = "rotate(270deg)";
+            else
+                rotation = "rotate(180deg)";
         }
         else if (num1Mesa == fichasOriginal[id].num2)
         {
-            copiaFicha.style.transform = "";
-            copiaFicha.draggable = false;
-            copiaFicha.ondragstart = "";
-            document.getElementById('tablero').insertBefore(copiaFicha, document.getElementById('tablero').firstChild);
-            num1Mesa = fichasOriginal[id].num1;
-            console.log("Mismo numero 1 - 2");
-            newBot.turno();
-        }
-            
-        else if (num2Mesa == fichasOriginal[id].num1)
-        {
-            copiaFicha.style.transform = "";
-            copiaFicha.draggable = false;
-            copiaFicha.ondragstart = "";
-            document.getElementById('tablero').appendChild(copiaFicha);
-            num2Mesa = fichasOriginal[id].num2;
-            console.log("Mismo numero 2 - 1");
-            newBot.turno();
+            if ((contadorFichas.numeroFichas0 == 20)||(contadorFichas.numeroFichas0 == 10))
+                rotation = "rotate(90deg)";
         }
         else if (num2Mesa == fichasOriginal[id].num2)
         {
-            copiaFicha.style.transform = "";
-            copiaFicha.draggable = false;
-            copiaFicha.ondragstart = "";
-            document.getElementById('tablero').appendChild(copiaFicha);// fallo??
-            copiaFicha.style.transform = "rotate(180deg)";
-            num2Mesa = fichasOriginal[id].num1;
-            console.log("Mismo numero 2");
-            newBot.turno();
-        }
-        if(comprobarVictoria() !== false) {
-            if(comprobarVictoria() === true)
-                alert('Empate');
+            if ((contadorFichas.numeroFichas1 == 30)||(contadorFichas.numeroFichas1 == 40))
+                rotation = "rotate(90deg)";
             else
-                alert("Ha ganado el " + comprobarVictoria());
-            winned = true;
+                rotation = "rotate(180deg)";
         }
-
+        else if (num2Mesa == fichasOriginal[id].num1)
+        {
+            if ((contadorFichas.numeroFichas1 == 30)||(contadorFichas.numeroFichas1 == 40))
+                    rotation = "rotate(270deg)";
+        }
         
+        insertarFicha(copiaFicha, ev.target.getAttribute("class"), rotation, undefined);
     }
-    console.log ("Fichas Actuales: " + num1Mesa + ":" + num2Mesa);
     
     ev.preventDefault();
 }
 
+function insertarFicha (objeto, lado, rotacion, bot)
+{
+    objeto.style.transform = "";
+    objeto.draggable = false;
+    objeto.ondragstart = "";
+    objeto.style.transform = rotacion;
+    var drops = document.getElementById('tablero').querySelectorAll('[ondrop]');
+    for (var drop of drops)
+    {
+        drop.setAttribute("ondrop", "");
+        drop.setAttribute("ondragover", "");
+    }
+    setTimeout(function () {
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].setAttribute("ondrop", "drop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].setAttribute("ondragover", "allowDrop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].setAttribute("ondrop", "drop(event)");
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].setAttribute("ondragover", "allowDrop(event)");    
+    }, 300);
+
+    var id = objeto.getAttribute('data-n');
+    if (lado == contadorFichas.numeroFichas0)
+        lado = "izquierda";
+    else if (lado == contadorFichas.numeroFichas1)
+        lado = "derecha";
+    
+    contadorFichas.sumarFicha(fichasOriginal[id].num1);
+    contadorFichas.sumarFicha(fichasOriginal[id].num2);
+
+    if (lado == "derecha")
+    {
+        if (num2Mesa == fichasOriginal[id].num1)
+            num2Mesa = fichasOriginal[id].num2;
+        else if (num2Mesa == fichasOriginal[id].num2)
+            num2Mesa = fichasOriginal[id].num1;
+
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas1)[0].appendChild(objeto);
+        contadorFichas.sumar(1);
+    }
+    else if (lado == "izquierda")
+    {
+        if (num1Mesa == fichasOriginal[id].num1)
+        {
+            num1Mesa = fichasOriginal[id].num2;
+        }
+        else if (num1Mesa == fichasOriginal[id].num2)
+        {
+            num1Mesa = fichasOriginal[id].num1;
+        }
+            
+        document.getElementById('tablero').getElementsByClassName(contadorFichas.numeroFichas0)[0].appendChild(objeto);
+        contadorFichas.sumar(0);
+    }
+    else if (lado == "primera")
+    {
+        var centro = document.getElementById('tablero').getElementsByTagName('table')[0].getElementsByTagName('tr')[4].getElementsByTagName('td')[4];
+        centro.appendChild(objeto);
+    }
+    if(comprobarVictoria() !== false) {
+        if(comprobarVictoria() === true)
+            alert('Empate');
+        else
+            alert("Ha ganado el " + comprobarVictoria());
+        winned = true;
+    }
+    else if (bot == undefined)
+        newBot.turno();
+    
+}
+
 function comprobarVictoria () {
-    console.log("comprobando...")
     var fichasJ = 0;
     for (var i = 0; i < document.getElementById('mano').childNodes.length; i++)
         if (document.getElementById('mano').childNodes[i].tagName != undefined)
@@ -356,20 +437,9 @@ function comprobarVictoria () {
         return "jugador";
     if (newBot.mano.length == 0)
         return "bot";
-    if (fichas.length == 0)
-    {
-        var posibilidad = false;
-        for (var ficha of  fichasEnMano)
-            if ((ficha.num1 == num1Mesa)||(ficha.num2 == num2Mesa)||(ficha.num2 == num1Mesa)||(ficha.num1 == num2Mesa))
-                if (ficha.num1 != ficha.num2) 
-                    posibilidad = true;
-        
-        if (fichas.length > 0)
-            for (var ficha of  fichas)
-                if ((ficha.num1 == num1Mesa)||(ficha.num2 == num2Mesa)||(ficha.num2 == num1Mesa)||(ficha.num1 == num2Mesa))
-                    if (ficha.num1 != ficha.num2) 
-                        posibilidad = true;
-        if (!posibilidad)
+    
+    for (var ficha of contadorFichas.fichas)
+        if (ficha == 8) 
         {
             var puntosJugador = 0;
             var puntosBot = 0;
@@ -387,10 +457,48 @@ function comprobarVictoria () {
             else
                 return true;
         }
-        
+    return false;
+}
+
+function generarTablero () {
+    var count = 49;
+    var table = document.createElement('table');
+    for (var i = 0; i<9; i++)
+    {
+        var tr = document.createElement('tr');
+        for (var x = 0; x<9; x++)
+        {
+            var td = document.createElement('td');
+            td.width = 88;
+            td.height = 46;
+            td.setAttribute("class", count);
+            if (
+                ((i == 1)&&(x!=0)) ||
+                ((i == 3)&&(x!=8)) ||
+                ((i == 5)&&(x!=0)) ||
+                ((i == 7)&&(x!=8))
+            )
+            {
+                 td.setAttribute("class", "");
+                 td.height = 88;
+            }
+            else
+                count--;
+            if ((i == 1)||(i == 2)||(i == 5)||(i == 6)||(i == 7))
+                td.style.transform = "rotate(180deg)";
+            
+            if ((i == 0)||(i == 4)||(i == 8))
+                tr.insertBefore(td, tr.firstChild);
+            else
+            {
+                tr.appendChild(td);
+            }
+                
+            
+        }
+        table.appendChild(tr);
     }
-    else
-        return false;
-    
+    document.getElementById('tablero').appendChild(table);
 }
 // ######################### FIN DE FUNCIONES #####################################
+
